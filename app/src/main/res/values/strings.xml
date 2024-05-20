@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">YogaTrainingApp</string>
+    <string name="history_btn">History</string>
+    <string name="train_btn">Start Train</string>
+    <string name="asan_name">Asan</string>
+    <string name="training_date">Train date</string>
+</resources>

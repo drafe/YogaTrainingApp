@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/firstAktFragment">
+
+    <fragment
+        android:id="@+id/firstAktFragment"
+        android:name="com.drafe.yogatrainingapp.FirstAktFragment"
+        android:label="FirstAktFragment"
+        tools:layout="@layout/fragment_first_akt">
+        <action
+            android:id="@+id/show_TrainHistory_list"
+            app:destination="@id/historyListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyListFragment"
+        android:name="com.drafe.yogatrainingapp.HistoryListFragment"
+        android:label="history_list_fragment"
+        tools:layout="@layout/history_list_fragment" >
+        <action
+            android:id="@+id/show_TrainHistory_detail"
+            app:destination="@id/historyDetailFragment" >
+            <argument android:name="historyId"
+                app:argType="java.util.UUID" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyDetailFragment"
+        android:name="com.drafe.yogatrainingapp.HistoryDetailFragment"
+        android:label="history_detail_fragment"
+        tools:layout="@layout/history_detail_fragment" >
+        <argument android:name="historyId"
+            app:argType="java.util.UUID" />
+    </fragment>
+</navigation>
