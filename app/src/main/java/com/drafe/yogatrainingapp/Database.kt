@@ -87,25 +87,4 @@ class TrainTypeConverters {
         return Date(millisSinceEpoch)
     }
 
-    @TypeConverter
-    fun fromUUID(uuid: UUID?): ByteArray? {
-        Log.d("fromUUID", "$uuid")
-        return uuid?.let {
-            val byteBuffer = ByteBuffer.wrap(ByteArray(16))
-            byteBuffer.putLong(it.mostSignificantBits)
-            byteBuffer.putLong(it.leastSignificantBits)
-            byteBuffer.array()
-        }
-    }
-
-    @TypeConverter
-    fun toUUID(bytes: ByteArray?): UUID? {
-    Log.d("toUUID", "${bytes.toString()}")
-        return bytes?.let {
-            val byteBuffer = ByteBuffer.wrap(it)
-            val mostSignificantBits = byteBuffer.long
-            val leastSignificantBits = byteBuffer.long
-            UUID(mostSignificantBits, leastSignificantBits)
-        }
-    }
 }

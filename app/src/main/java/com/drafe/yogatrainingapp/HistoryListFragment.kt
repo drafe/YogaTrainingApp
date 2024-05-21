@@ -46,12 +46,9 @@ class HistoryListFragment:Fragment() {
                 historyViewModel.historyList.collect { historyList ->
                     binding.historyRecyclerView.adapter =
                         HistoryListAdapter(historyList) {historyId ->
-                            Log.d("HistoryListFragment", "$historyId clicked")
-                            val h = historyViewModel.getTrainHistory(historyId)
-//                            findNavController().navigate(
-////                                R.id.show_TrainHistory_detail
-//                                HistoryListFragmentDirections.showTrainHistoryDetail(historyId)
-//                            )
+                            findNavController().navigate(
+                                HistoryListFragmentDirections.showTrainHistoryDetail(historyId)
+                            )
                         }
                 }
             }
