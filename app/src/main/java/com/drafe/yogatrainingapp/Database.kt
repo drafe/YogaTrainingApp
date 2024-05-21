@@ -2,6 +2,7 @@ package com.drafe.yogatrainingapp
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Query
@@ -10,11 +11,13 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import kotlinx.coroutines.flow.Flow
+import java.nio.ByteBuffer
 import java.util.Date
 import java.util.UUID
+import java.util.concurrent.Executors
 
 //private const val DATABASE_NAME = "yoga-train-db"
-private const val DATABASE_NAME = "sqlite-2"
+private const val DATABASE_NAME = "sqlite-5"
 
 @Dao
 interface TrainHistoryDao {
@@ -22,7 +25,7 @@ interface TrainHistoryDao {
     @Query("SELECT * FROM Train")
     fun getTrainHistory(): Flow<List<TrainHistory>>
 
-    @Query("SELECT * FROM Train WHERE id = :id")
+    @Query("SELECT * FROM Train WHERE id = (:id)")
     suspend fun getTrainHistoryById(id: UUID): TrainHistory
 }
 
@@ -35,6 +38,9 @@ class TrainHistoryRepository private constructor(context: Context) {
             TrainHistoryDatabase::class.java,
             DATABASE_NAME
         )
+        .setQueryCallback(RoomDatabase.QueryCallback { sqlQuery, bindArgs ->
+        Log.d("RoomQuery", "SQL Query: $sqlQuery SQL Args: $bindArgs")
+        }, Executors.newSingleThreadExecutor())
         .createFromAsset(DATABASE_NAME)
         .build()
 
@@ -79,5 +85,27 @@ class TrainTypeConverters {
     @TypeConverter
     fun toDate(millisSinceEpoch: Long): Date {
         return Date(millisSinceEpoch)
+    }
+
+    @TypeConverter
+    fun fromUUID(uuid: UUID?): ByteArray? {
+        Log.d("fromUUID", "$uuid")
+        return uuid?.let {
+            val byteBuffer = ByteBuffer.wrap(ByteArray(16))
+            byteBuffer.putLong(it.mostSignificantBits)
+            byteBuffer.putLong(it.leastSignificantBits)
+            byteBuffer.array()
+        }
+    }
+
+    @TypeConverter
+    fun toUUID(bytes: ByteArray?): UUID? {
+    Log.d("toUUID", "${bytes.toString()}")
+        return bytes?.let {
+            val byteBuffer = ByteBuffer.wrap(it)
+            val mostSignificantBits = byteBuffer.long
+            val leastSignificantBits = byteBuffer.long
+            UUID(mostSignificantBits, leastSignificantBits)
+        }
     }
 }

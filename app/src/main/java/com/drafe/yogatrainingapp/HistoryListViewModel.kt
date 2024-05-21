@@ -1,5 +1,6 @@
 package com.drafe.yogatrainingapp
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -16,6 +17,15 @@ class HistoryListViewModel: ViewModel() {
     init {
         viewModelScope.launch {
 
+        }
+    }
+
+    fun getTrainHistory(id: UUID){
+        Log.d("HistoryListViewModel", "$id")
+        viewModelScope.launch {
+            val en = historyRepository.getTrainHistoryById(id)
+            Log.d("HistoryListViewModel", "$en")
+            if (en != null) {Log.d("HistoryListViewModel", "${en.id}, ${en.asanName}")}
         }
     }
 }

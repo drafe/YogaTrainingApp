@@ -1,6 +1,7 @@
 package com.drafe.yogatrainingapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drafe.yogatrainingapp.databinding.HistoryListFragmentBinding
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class HistoryListFragment:Fragment() {
     private var _binding: HistoryListFragmentBinding? = null
@@ -44,10 +46,12 @@ class HistoryListFragment:Fragment() {
                 historyViewModel.historyList.collect { historyList ->
                     binding.historyRecyclerView.adapter =
                         HistoryListAdapter(historyList) {historyId ->
-                            findNavController().navigate(
-//                                R.id.show_TrainHistory_detail
-                                HistoryListFragmentDirections.showTrainHistoryDetail(historyId)
-                            )
+                            Log.d("HistoryListFragment", "$historyId clicked")
+                            val h = historyViewModel.getTrainHistory(historyId)
+//                            findNavController().navigate(
+////                                R.id.show_TrainHistory_detail
+//                                HistoryListFragmentDirections.showTrainHistoryDetail(historyId)
+//                            )
                         }
                 }
             }

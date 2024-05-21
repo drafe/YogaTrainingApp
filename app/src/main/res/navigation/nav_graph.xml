@@ -23,8 +23,6 @@
         <action
             android:id="@+id/show_TrainHistory_detail"
             app:destination="@id/historyDetailFragment" >
-            <argument android:name="historyId"
-                app:argType="java.util.UUID" />
         </action>
     </fragment>
 
@@ -33,7 +31,8 @@
         android:name="com.drafe.yogatrainingapp.HistoryDetailFragment"
         android:label="history_detail_fragment"
         tools:layout="@layout/history_detail_fragment" >
-        <argument android:name="historyId"
+        <argument
+            android:name="historyId"
             app:argType="java.util.UUID" />
     </fragment>
 </navigation>
