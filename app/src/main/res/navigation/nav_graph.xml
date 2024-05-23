@@ -13,6 +13,9 @@
         <action
             android:id="@+id/show_TrainHistory_list"
             app:destination="@id/historyListFragment" />
+        <action
+            android:id="@+id/show_Asana_list"
+            app:destination="@id/asanaListFragment" />
     </fragment>
 
     <fragment
@@ -35,4 +38,11 @@
             android:name="historyId"
             app:argType="java.util.UUID" />
     </fragment>
+
+    <fragment
+        android:id="@+id/asanaListFragment"
+        android:name="com.drafe.yogatrainingapp.AsanaListFragment"
+        android:label="asana_list_fragment"
+        tools:layout="@layout/asana_list_fragment" />
+
 </navigation>

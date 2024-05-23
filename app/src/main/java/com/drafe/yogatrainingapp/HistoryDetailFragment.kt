@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,12 +18,11 @@ import com.drafe.yogatrainingapp.databinding.HistoryDetailFragmentBinding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 class HistoryDetailViewModel(historyId: UUID): ViewModel() {
-    private val historyRepository = TrainHistoryRepository.get()
+    private val historyRepository = YogaRepository.get()
 
     private val _history: MutableStateFlow<TrainHistory?> = MutableStateFlow(null)
     val history: StateFlow<TrainHistory?> = _history.asStateFlow()

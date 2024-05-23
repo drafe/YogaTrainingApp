@@ -35,11 +35,13 @@ class FirstAktFragment: Fragment() {
         binding.apply {
             newTrainBtn.setOnClickListener {
                 Log.d("FirstScreenFragment", "newTrainBtn clicked")
+                findNavController().navigate(R.id.show_Asana_list)
 
             }
             seeHistoryBtn.setOnClickListener {
                 Log.d("FirstScreenFragment", "seeHistoryBtn clicked")
                 findNavController().navigate(R.id.show_TrainHistory_list)
+
             }
         }
     }

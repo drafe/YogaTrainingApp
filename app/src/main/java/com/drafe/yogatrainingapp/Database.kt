@@ -1,6 +1,5 @@
 package com.drafe.yogatrainingapp
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.room.Dao
@@ -11,13 +10,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import kotlinx.coroutines.flow.Flow
-import java.nio.ByteBuffer
 import java.util.Date
 import java.util.UUID
 import java.util.concurrent.Executors
 
 //private const val DATABASE_NAME = "yoga-train-db"
-private const val DATABASE_NAME = "sqlite-5"
+private const val DATABASE_NAME = "sqlite-7"
 
 @Dao
 interface TrainHistoryDao {
@@ -29,13 +27,22 @@ interface TrainHistoryDao {
     suspend fun getTrainHistoryById(id: UUID): TrainHistory
 }
 
+@Dao
+interface AsanaDao {
+    @Query("SELECT * FROM Asana")
+    fun getAllAsanas(): Flow<List<Asana>>
 
-class TrainHistoryRepository private constructor(context: Context) {
+    @Query("SELECT * FROM Asana WHERE id = (:id)")
+    suspend fun getAsanaById(id: UUID): Asana
+}
 
-    private val database: TrainHistoryDatabase = Room
+
+class YogaRepository private constructor(context: Context) {
+
+    private val database: YogaAppDatabase = Room
         .databaseBuilder(
             context.applicationContext,
-            TrainHistoryDatabase::class.java,
+            YogaAppDatabase::class.java,
             DATABASE_NAME
         )
         .setQueryCallback(RoomDatabase.QueryCallback { sqlQuery, bindArgs ->
@@ -52,31 +59,44 @@ class TrainHistoryRepository private constructor(context: Context) {
         return database.trainHistoryDao().getTrainHistoryById(id)
     }
 
+    fun getAsanas(): Flow<List<Asana>> {
+        return database.asanaDao().getAllAsanas()
+    }
+
+    suspend fun getAsanaById(id: UUID): Asana {
+        return database.asanaDao().getAsanaById(id)
+    }
+
     companion object {
-        private var INSTANCE: TrainHistoryRepository? = null
+        private var INSTANCE: YogaRepository? = null
 
         fun initialize(context: Context) {
+            Log.d("YogaRepository", "initialize")
             if (INSTANCE == null) {
-                INSTANCE = TrainHistoryRepository(context)
+                INSTANCE = YogaRepository(context)
             }
         }
 
-        fun get(): TrainHistoryRepository {
+        fun get(): YogaRepository {
             return INSTANCE ?:
-            throw IllegalStateException("TrainHistoryRepository must be initialized")
+            throw IllegalStateException("YogaRepository must be initialized")
         }
     }
 }
 
 
-@Database(entities = [ TrainHistory::class ], version=1)
-@TypeConverters(TrainTypeConverters::class)
-abstract class TrainHistoryDatabase : RoomDatabase() {
+@Database(entities = [ TrainHistory::class, Asana::class ], version=1)
+@TypeConverters(YogaTypeConverters::class)
+abstract class YogaAppDatabase : RoomDatabase() {
     abstract fun trainHistoryDao(): TrainHistoryDao
+
+    abstract fun asanaDao(): AsanaDao
 }
 
 
-class TrainTypeConverters {
+
+
+class YogaTypeConverters {
     @TypeConverter
     fun fromDate(date: Date): Long {
         return date.time
