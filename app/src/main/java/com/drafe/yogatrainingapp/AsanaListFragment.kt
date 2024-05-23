@@ -43,9 +43,9 @@ class AsanaListFragment: Fragment() {
                 asanaViewModel.asanaList.collect { asanaList ->
                     binding.asanaRecyclerView.adapter =
                         AsanaListAdapter(asanaList) {asanaId ->
-////                            findNavController().navigate(
-////                                AsanaListFragmentDirections.showAsanaDetail(asanaId)
-//                            )
+                            findNavController().navigate(
+                                AsanaListFragmentDirections.showAsanaDetail(asanaId)
+                            )
                         }
                 }
             }

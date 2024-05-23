@@ -43,6 +43,18 @@
         android:id="@+id/asanaListFragment"
         android:name="com.drafe.yogatrainingapp.AsanaListFragment"
         android:label="asana_list_fragment"
-        tools:layout="@layout/asana_list_fragment" />
-
+        tools:layout="@layout/asana_list_fragment" >
+        <action
+            android:id="@+id/show_Asana_detail"
+            app:destination="@id/asanaDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/asanaDetailFragment"
+        android:name="com.drafe.yogatrainingapp.AsanaDetailFragment"
+        android:label="asana_detail_fragment"
+        tools:layout="@layout/asana_detail_fragment" >
+        <argument
+            android:name="asanaId"
+            app:argType="java.util.UUID" />
+    </fragment>
 </navigation>

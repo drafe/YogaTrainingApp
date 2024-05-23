@@ -10,6 +10,7 @@
         android:id="@+id/new_train_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/PrimaryColor"
         android:text="@string/train_btn"
         android:minWidth="130dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,6 +22,7 @@
         android:id="@+id/see_history_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/PrimaryColor"
         android:minWidth="130dp"
         android:text="@string/history_btn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,13 +39,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Круглый градиентный фон для изображения -->
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/asana_icon_background"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/asana_icon_background"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+    <ImageView
+        android:id="@+id/asana_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/yoga_first"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
