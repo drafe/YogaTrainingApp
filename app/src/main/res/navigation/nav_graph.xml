@@ -56,5 +56,35 @@
         <argument
             android:name="asanaId"
             app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/action_asanaDetailFragment_to_trainingDurationFragment"
+            app:destination="@id/trainingDurationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/trainingDurationFragment"
+        android:name="com.drafe.yogatrainingapp.TrainingDurationFragment"
+        android:label="training_duration_fragment"
+        tools:layout="@layout/training_duration_fragment" >
+        <argument
+            android:name="asanaId"
+            app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/show_Camera"
+            app:destination="@id/cameraFragment" >
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.drafe.yogatrainingapp.CameraFragment"
+        android:label="camera_fragment"
+        tools:layout="@layout/camera_fragment" >
+        <argument
+            android:name="asanaId"
+            app:argType="java.util.UUID" />
+        <argument
+            android:name="duration"
+            app:argType="integer" />
+
+    </fragment>
+
 </navigation>

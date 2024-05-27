@@ -69,6 +69,15 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
+    implementation("com.github.lzyzsd:circleprogress:1.1.0")
+// CameraX core library
+    implementation ("androidx.camera:camera-core:1.3.3")
+    // CameraX Camera2 extensions
+    implementation ("androidx.camera:camera-camera2:1.3.3")
+    // CameraX Lifecycle library
+    implementation ("androidx.camera:camera-lifecycle:1.3.3")
+    // CameraX View class
+    implementation( "androidx.camera:camera-view:1.3.3")
 //    // CameraX core library
 //    implementation (libs.androidx.camera.core)
 //    // CameraX Camera2 extensions

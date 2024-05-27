@@ -1,10 +1,14 @@
 package com.drafe.yogatrainingapp
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.drafe.yogatrainingapp.databinding.AsanaDetailFragmentBinding
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +45,17 @@ class AsanaDetailFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = AsanaDetailFragmentBinding.inflate(inflater, container, false)
+
+        // Получение asanaId из аргументов Safe Args
+        val asanaId = args.asanaId
+
+        // Установка обработчика клика для кнопки
+        binding.startTrainButton.setOnClickListener {
+            // Открытие диалога подтверждения
+            val dialog = ConfirmTechniqueDialog(asanaId)
+            dialog.show(parentFragmentManager, "ConfirmTechniqueDialog")
+        }
+
         return binding.root
     }
 
@@ -57,6 +73,7 @@ class AsanaDetailFragment: Fragment() {
     }
 
     private fun updateUi(asana: Asana) {
+        Log.d("AsanaDetailFragment", "Asana: $asana")
         binding.apply {
             asanName.text = asana.nameEng
             asanaNameHindi.text = asana.nameHin
@@ -75,6 +92,24 @@ class AsanaDetailFragment: Fragment() {
     }
 }
 
+
+class ConfirmTechniqueDialog(private val asanaId: UUID) : DialogFragment() {
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext())
+            .setTitle("Confirmation")
+            .setMessage("Have you read the technique?")
+            .setPositiveButton("Yes") { _, _ ->
+                // Переход к CameraFragment с аргументом asanaId
+                val action = AsanaDetailFragmentDirections.actionAsanaDetailFragmentToTrainingDurationFragment(asanaId)
+                findNavController().navigate(action)
+            }
+            .setNegativeButton("No", null)
+            .create()
+    }
+}
+
+
 class AsanaDetailViewModelFactory(private val asanaId: UUID) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass:Class<T>): T{
         return AsanaDetailViewModel(asanaId) as T
@@ -90,6 +125,7 @@ class AsanaDetailViewModel(asanaId: UUID): ViewModel() {
 
     init {
         viewModelScope.launch {
+            Log.d("AsanaDetailViewModel", "Asana reset is $asanaId")
             _asana.value = asanaRepository.getAsanaById(asanaId)
         }
     }
