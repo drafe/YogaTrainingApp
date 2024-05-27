@@ -1,11 +1,16 @@
 package com.drafe.yogatrainingapp
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import android.Manifest
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -31,6 +36,8 @@ class CameraFragment: Fragment() {
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
+
+    private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     private val cameraViewModel: CameraViewModel by viewModels {
         CameraViewModelFactory(args.asanaId)
@@ -68,7 +75,48 @@ class CameraFragment: Fragment() {
 
         // Start the timer
         cameraViewModel.startTimer(args.duration)
+
+
+        // Check if permission is granted
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED) {
+            // Set up the camera
+            startCamera()
+        } else {
+            // Handle the case when permission is not granted
+            // You can navigate back or show an error message
+        }
+
+        // Button to switch camera
+        binding.switchCamera.setOnClickListener {
+            cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                CameraSelector.DEFAULT_FRONT_CAMERA
+            } else {
+                CameraSelector.DEFAULT_BACK_CAMERA
+            }
+            startCamera()
+        }
     }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        cameraProviderFuture.addListener({
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(binding.viewCamera.surfaceProvider)
+            }
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview
+                )
+            } catch (exc: Exception) {
+                Log.e("CameraFragment", "Use case binding failed", exc)
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
 
     private fun updateTimer(timerValue: Int) {
         binding.timerCircle.progress = timerValue

@@ -1,66 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".CameraFragment">
 
-    <FrameLayout
-        android:id="@+id/camera_preview"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/view_camera"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+
+
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/camera_preview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/button_end_training"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <TextView
         android:id="@+id/asana_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="Asana Name"
+        android:background="@color/PrimaryColor"
         android:textSize="18sp"
-        android:textColor="@color/PrimaryColorText"
+        android:textColor="@color/white"
+        android:textStyle="bold"
 
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginTop="24dp"/>
 
     <com.github.lzyzsd.circleprogress.DonutProgress
         android:id="@+id/timer_circle"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="16dp"
         app:donut_progress="100"
-
         app:donut_suffix_text=""
         app:donut_finished_color="@color/PrimaryColor"
         app:donut_finished_stroke_width="10dp"
         app:donut_text_color="@color/PrimaryColorText"
         app:donut_unfinished_color="#80CBC4"
-        app:donut_unfinished_stroke_width="6dp"/>
+        app:donut_unfinished_stroke_width="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_switch_camera"
+        android:id="@+id/switch_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
         app:srcCompat="@drawable/camera_rotate"
         app:maxImageSize="30dp"
         android:backgroundTint="#80CBC4"
-        android:contentDescription="switch_camera" />
+        android:contentDescription="switch_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:id="@+id/button_end_training"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/PrimaryColor"
         android:text="End Training"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/PrimaryColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp"/>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

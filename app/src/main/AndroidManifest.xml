@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.drafe.yogatrainingapp">
 
+    <!-- Declare features -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.front" />
+
+    <!-- Declare permissions -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".TrainHistoryIntentApplication"
         android:allowBackup="true"
@@ -14,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YogaTrainingApp"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
