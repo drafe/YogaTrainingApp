@@ -82,6 +82,8 @@ dependencies {
 //    // MediaPipe Library
     implementation ("com.google.mediapipe:tasks-vision:0.20230731")
 
+    implementation("com.google.code.gson:gson:2.8.6")
+
 
 // ******************************
     testImplementation(libs.junit)

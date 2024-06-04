@@ -43,7 +43,6 @@ import java.util.concurrent.TimeUnit
 
 
 class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
-//    private lateinit var poseProcessor: PoseProcessor
     private val args: CameraFragmentArgs by navArgs()
     private var _binding: CameraFragmentBinding? = null
     private val binding
@@ -74,8 +73,7 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_GRANTED) {
 
-        // Start the PoseLandmarkerHelper again when users come back
-        // to the foreground.
+        // Start the PoseLandmarkerHelper again when users come back to the foreground.
         backgroundExecutor.execute {
             if(this::poseLandmarkerHelper.isInitialized) {
                 if (poseLandmarkerHelper.isClose()) {
@@ -184,15 +182,7 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 it.setSurfaceProvider(binding.viewCamera.surfaceProvider)
             }
             bindCameraUseCases()
-//            try {
-//
-//                cameraProvider.unbindAll()
-//                cameraProvider.bindToLifecycle(
-//                    this, cameraSelector, preview
-//                )
-//            } catch (exc: Exception) {
-//                Log.e("CameraFragment", "Use case binding failed", exc)
-//            }
+
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
@@ -204,10 +194,8 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         val cameraProvider = cameraProvider
             ?: throw IllegalStateException("Camera initialization failed.")
 
-//        val cameraFacing =
-//            CameraSelector.Builder().requireLensFacing(cameraSelector).build()
 
-        // Preview. Only using the 4:3 ratio because this is the closest to our models
+        // Preview. Only using the 4:3 ratio because this is the closest to our model
         preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3)
             .setTargetRotation(binding.viewCamera.display.rotation)
             .build()
@@ -258,7 +246,6 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private fun updateUi(asana: Asana) {
         binding.asanaName.text = asana.nameEng
     }
-
 
     override fun onError(error: String, errorCode: Int) {
         activity?.runOnUiThread {
