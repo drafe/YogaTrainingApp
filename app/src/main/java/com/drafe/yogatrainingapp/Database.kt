@@ -9,6 +9,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.drafe.yogatrainingapp.asana.Asana
+import com.drafe.yogatrainingapp.history.TrainHistory
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 import java.util.UUID

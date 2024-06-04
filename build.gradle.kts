@@ -15,5 +15,6 @@ buildscript {
     dependencies {
         classpath(libs.gradle)
         classpath(libs.kotlin.gradle.plugin)
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.7") //add here.
     }
 }

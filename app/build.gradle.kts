@@ -78,17 +78,10 @@ dependencies {
     implementation ("androidx.camera:camera-lifecycle:1.3.3")
     // CameraX View class
     implementation( "androidx.camera:camera-view:1.3.3")
-//    // CameraX core library
-//    implementation (libs.androidx.camera.core)
-//    // CameraX Camera2 extensions
-//    implementation (libs.androidx.camera.camera2)
-//    // CameraX Lifecycle library
-//    implementation (libs.androidx.camera.lifecycle)
-//    // CameraX View class
-//    implementation (libs.androidx.camera.view)
-//
+
 //    // MediaPipe Library
-//    implementation ("com.google.mediapipe:tasks-vision:0.20230731")
+    implementation ("com.google.mediapipe:tasks-vision:0.20230731")
+
 
 // ******************************
     testImplementation(libs.junit)

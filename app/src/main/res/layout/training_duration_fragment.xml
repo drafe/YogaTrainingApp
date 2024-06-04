@@ -21,12 +21,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:backgroundTint="@color/PrimaryColor"
          />
 
     <Button
         android:id="@+id/start_training_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/PrimaryColor"
         android:text="Start"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/training_duration_picker"

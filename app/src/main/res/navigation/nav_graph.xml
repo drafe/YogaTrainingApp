@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/historyListFragment"
-        android:name="com.drafe.yogatrainingapp.HistoryListFragment"
+        android:name="com.drafe.yogatrainingapp.history.HistoryListFragment"
         android:label="history_list_fragment"
         tools:layout="@layout/history_list_fragment" >
         <action
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/historyDetailFragment"
-        android:name="com.drafe.yogatrainingapp.HistoryDetailFragment"
+        android:name="com.drafe.yogatrainingapp.history.HistoryDetailFragment"
         android:label="history_detail_fragment"
         tools:layout="@layout/history_detail_fragment" >
         <argument
@@ -41,7 +41,7 @@
 
     <fragment
         android:id="@+id/asanaListFragment"
-        android:name="com.drafe.yogatrainingapp.AsanaListFragment"
+        android:name="com.drafe.yogatrainingapp.asana.AsanaListFragment"
         android:label="asana_list_fragment"
         tools:layout="@layout/asana_list_fragment" >
         <action
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/asanaDetailFragment"
-        android:name="com.drafe.yogatrainingapp.AsanaDetailFragment"
+        android:name="com.drafe.yogatrainingapp.asana.AsanaDetailFragment"
         android:label="asana_detail_fragment"
         tools:layout="@layout/asana_detail_fragment" >
         <argument
@@ -84,6 +84,10 @@
         <argument
             android:name="duration"
             app:argType="integer" />
+        <action
+            android:id="@+id/show_TrainHistory_results"
+            app:destination="@id/historyDetailFragment" >
+        </action>
 
     </fragment>
 
