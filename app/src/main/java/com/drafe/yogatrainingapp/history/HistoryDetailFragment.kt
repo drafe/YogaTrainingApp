@@ -92,7 +92,7 @@ class HistoryDetailFragment: Fragment() {
         binding.apply {
             asanName.text = history.asanName
 
-            comment.text = history.comment
+//            webview. = history.comment
         }
     }
 }
