@@ -1,6 +1,9 @@
 package com.drafe.yogatrainingapp.history
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,19 +17,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.navArgs
+import com.drafe.yogatrainingapp.TrainHistoryWithAsana
 import com.drafe.yogatrainingapp.YogaRepository
+import com.drafe.yogatrainingapp.asana.Asana
 import com.drafe.yogatrainingapp.databinding.HistoryDetailFragmentBinding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.UUID
 
 class HistoryDetailViewModel(historyId: UUID): ViewModel() {
     private val historyRepository = YogaRepository.get()
 
-    private val _history: MutableStateFlow<TrainHistory?> = MutableStateFlow(null)
-    val history: StateFlow<TrainHistory?> = _history.asStateFlow()
+    private val _history: MutableStateFlow<TrainHistoryWithAsana?> = MutableStateFlow(null)
+    val history: StateFlow<TrainHistoryWithAsana?> = _history.asStateFlow()
+
 
     init {
         viewModelScope.launch {
@@ -88,11 +96,32 @@ class HistoryDetailFragment: Fragment() {
         }
     }
 
-    private fun updateUi(history: TrainHistory) {
+    @SuppressLint("SetTextI18n")
+    private fun updateUi(history: TrainHistoryWithAsana) {
         binding.apply {
-            asanName.text = history.asanName
+            asanName.text = history.asanaName
+            trainScore.text = history.score.toString()+"%"
+            category.text = history.category
+            when(history.difficulty) {
+                1 -> difficulty.text = "Beginner"
+                2 -> difficulty.text = "Intermediate"
+                3 -> difficulty.text = "Advanced"
+                else -> difficulty.text = "Unknown"
+            }
+            // Загрузка иконки асаны из assets
+            try {
+                val assetManager = requireContext().assets
+                val inputStream = assetManager.open("poses/${history.imgName}")
+                val drawable = Drawable.createFromStream(inputStream, null)
+                imageView.setImageDrawable(drawable)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                // Обработайте ошибку (например, установите изображение по умолчанию)
+            }
 
-//            webview. = history.comment
+            val htmlText = history.expertCom.trimIndent()
+            textView.text = Html.fromHtml(htmlText, Html.FROM_HTML_MODE_COMPACT)
+
         }
     }
 }

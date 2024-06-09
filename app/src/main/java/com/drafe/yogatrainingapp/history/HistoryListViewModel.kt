@@ -23,7 +23,7 @@ class HistoryListViewModel: ViewModel() {
         viewModelScope.launch {
             val en = historyRepository.getTrainHistoryById(id)
             Log.d("HistoryListViewModel", "$en")
-            if (en != null) {Log.d("HistoryListViewModel", "${en.id}, ${en.asanName}")}
+            if (en != null) {Log.d("HistoryListViewModel", "${en.id}, ${en.asanaName}")}
         }
     }
 }

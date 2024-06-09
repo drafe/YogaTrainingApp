@@ -1,5 +1,6 @@
 package com.drafe.yogatrainingapp
 
+import MetricSystem
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.navArgs
-import com.drafe.yogatrainingapp.asana.Asana
 import com.drafe.yogatrainingapp.databinding.CameraFragmentBinding
 import com.drafe.yogatrainingapp.model.PoseLandmarkerHelper
 import com.drafe.yogatrainingapp.model.PoseViewModel
@@ -64,6 +64,8 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var cameraProvider: ProcessCameraProvider? = null
     /** Blocking ML operations are performed using this executor */
     private lateinit var backgroundExecutor: ExecutorService
+
+    private var metricSystem: MetricSystem? = null
 
 
     override fun onResume() {
@@ -139,6 +141,7 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 currentDelegate = viewModel.currentDelegate,
                 poseLandmarkerHelperListener = this
             )
+            Log.d("PoseLandmarkerHelper", "PoseLandmarkerHelper initialized")
         }
 
         binding.timerCircle.max = args.duration
@@ -147,7 +150,10 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 cameraViewModel.asana.collect { asana ->
-                    asana?.let { updateUi(it) }
+                    asana?.let {it ->
+                        updateUi(it)
+                        metricSystem = MetricSystem(it.nameEng)
+                    }
                 }
             }
         }
@@ -237,13 +243,13 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 imageProxy = imageProxy,
                 isFrontCamera = cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA
             )
-        }
+    }
     }
     private fun updateTimer(timerValue: Int) {
         binding.timerCircle.progress = timerValue
     }
 
-    private fun updateUi(asana: Asana) {
+    private fun updateUi(asana: AsanaWithCategory) {
         binding.asanaName.text = asana.nameEng
     }
 
@@ -255,27 +261,36 @@ class CameraFragment: Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             }
         }
     }
+        override fun onResults(resultBundle: PoseLandmarkerHelper.ResultBundle) {
+            activity?.runOnUiThread {
+                if (_binding != null) {
+                    // Pass necessary information to OverlayView for drawing on the canvas
+                    binding.overlay.setResults(
+                        resultBundle.results.first(),
+                        resultBundle.inputImageHeight,
+                        resultBundle.inputImageWidth,
+                        RunningMode.LIVE_STREAM
+                    )
 
-    override fun onResults(
-        resultBundle: PoseLandmarkerHelper.ResultBundle
-    ) {
-        activity?.runOnUiThread {
-            if (_binding != null) {
+                    // Force a redraw
+                    binding.overlay.invalidate()
 
+//                    // Log the pose landmarks
+//                    val r = resultBundle.results.first()
+//                    for(landmark in r.landmarks()) {
+//                        Log.d("CameraFragment", landmark.size.toString())}
 
-                // Pass necessary information to OverlayView for drawing on the canvas
-                binding.overlay.setResults(
-                    resultBundle.results.first(),
-                    resultBundle.inputImageHeight,
-                    resultBundle.inputImageWidth,
-                    RunningMode.LIVE_STREAM
-                )
-
-                // Force a redraw
-                binding.overlay.invalidate()
+                    metricSystem?.let {
+                        val score = it.scoreMetric(
+                            resultBundle.results.first(),
+                            resultBundle.inputImageHeight,
+                            resultBundle.inputImageWidth
+                        )
+                        Log.d("MetricScore", "Score: $score")
+                    }
+                }
             }
         }
-    }
 }
 
 class CameraViewModelFactory(private val asanaId: UUID) : ViewModelProvider.Factory {
@@ -289,16 +304,18 @@ class CameraViewModelFactory(private val asanaId: UUID) : ViewModelProvider.Fact
 class CameraViewModel(asanaId: UUID): ViewModel() {
     private val asanaRepository = YogaRepository.get()
 
-    private val _asana: MutableStateFlow<Asana?> = MutableStateFlow(null)
-    val asana: StateFlow<Asana?> = _asana.asStateFlow()
+    private val _asana: MutableStateFlow<AsanaWithCategory?> = MutableStateFlow(null)
+    val asana: StateFlow<AsanaWithCategory?> = _asana.asStateFlow()
 
     private val _timerValue = MutableStateFlow(0)
     val timerValue: StateFlow<Int> = _timerValue.asStateFlow()
     private var timerStarted: Boolean = false
 
+
     init {
         viewModelScope.launch {
             _asana.value = asanaRepository.getAsanaById(asanaId)
+
         }
     }
 

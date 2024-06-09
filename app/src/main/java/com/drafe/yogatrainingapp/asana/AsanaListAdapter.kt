@@ -1,16 +1,16 @@
 package com.drafe.yogatrainingapp.asana
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.drafe.yogatrainingapp.AsanaWithCategory
 import com.drafe.yogatrainingapp.databinding.AsanaListItemBinding
 import java.io.IOException
 import java.util.UUID
 
 class AsanaListAdapter(
-    private val asanaList: List<Asana>,
+    private val asanaList: List<AsanaWithCategory>,
     private val onAsanaClicked: (asanaId: UUID) -> Unit
 ):    RecyclerView.Adapter<AsanaHolder>() {
 
@@ -31,7 +31,7 @@ class AsanaHolder(
     private val binding: AsanaListItemBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(asana: Asana, onAsanaClicked: (asanaId: UUID) -> Unit) {
+    fun bind(asana: AsanaWithCategory, onAsanaClicked: (asanaId: UUID) -> Unit) {
         binding.asanaNameEng.text = asana.nameEng
         binding.asanaNameHindi.text = asana.nameHin
 

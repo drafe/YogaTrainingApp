@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.drafe.yogatrainingapp.AsanaWithCategory
 import com.drafe.yogatrainingapp.YogaRepository
 import com.drafe.yogatrainingapp.databinding.AsanaDetailFragmentBinding
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,7 +75,7 @@ class AsanaDetailFragment: Fragment() {
         }
     }
 
-    private fun updateUi(asana: Asana) {
+    private fun updateUi(asana: AsanaWithCategory) {
         Log.d("AsanaDetailFragment", "Asana: $asana")
         binding.apply {
             asanName.text = asana.nameEng
@@ -89,6 +91,10 @@ class AsanaDetailFragment: Fragment() {
                 e.printStackTrace()
                 // Обработайте ошибку (например, установите изображение по умолчанию)
             }
+
+            val htmlText = asana.description.trimIndent()
+            asanaDetail.text = Html.fromHtml(htmlText, Html.FROM_HTML_MODE_COMPACT)
+
         }
     }
 }
@@ -121,8 +127,8 @@ class AsanaDetailViewModelFactory(private val asanaId: UUID) : ViewModelProvider
 class AsanaDetailViewModel(asanaId: UUID): ViewModel() {
     private val asanaRepository = YogaRepository.get()
 
-    private val _asana: MutableStateFlow<Asana?> = MutableStateFlow(null)
-    val asana: StateFlow<Asana?> = _asana.asStateFlow()
+    private val _asana: MutableStateFlow<AsanaWithCategory?> = MutableStateFlow(null)
+    val asana: StateFlow<AsanaWithCategory?> = _asana.asStateFlow()
 
     init {
         viewModelScope.launch {
